@@ -37,7 +37,7 @@ try {
     }
 
     // Get the video ID from the URL
-    $video_id = isset($_GET['video_id']) ? intval($_GET['video_id']) : 4;
+    $video_id = isset($_GET['video_id']) ? intval($_GET['video_id']) : 5;
 
     // Fetch video details from the database
     $query = "SELECT * FROM videos WHERE id = :id";
@@ -74,6 +74,24 @@ try {
         } else {
             $message[] = 'Comment cannot be empty!';
         }
+    }
+if ($user) {
+    // Extract user details for display
+    $user_name = $user['username'];
+    $user_gender = $user['gender'];
+
+      // Determine profile picture based on gender
+      $profile_picture = "../images/default.png"; // Default profile picture
+      if ($user_gender === "Male") {
+          $profile_picture = "/Project RPL/images/male-profile.png";
+      } elseif ($user_gender === "Female") {
+          $profile_picture = "/Project RPL/images/female-profile.png";
+      }
+    } else {
+      // If no user found, destroy session and redirect
+      session_destroy();
+      header("Location: /Project RPL/PHP/login_register.php");
+      exit();
     }
 
     // Fetch all comments for the video
@@ -118,11 +136,10 @@ try {
       <div class="icons">
         <div id="menu-btn" class="fas fa-bars"></div>
         <div id="user-btn" class="fas fa-user"></div>
-        <div id="close-btn" class="fas fa-times"></div>
       </div>
 
       <div class="profile">
-        <img src="../images/pic-1.jpg" class="image" alt="" />
+      <img src="<?php echo htmlspecialchars($profile_picture); ?>" class="image" alt="Profile Picture">
         <h3 class="name"></h3>  <h3 class="name"><?php echo htmlspecialchars($user_name); ?></h3>
         <p class="role">student</p>
         <a href="../PHP/profile.php" class="btn">view profile</a>
@@ -130,7 +147,7 @@ try {
           <a href="/Project RPL/PHP/login_register.php" class="option-btn">logout</a>
         </div>
         <div class="flex-btn">
-          <a href="update.php" class="option-btn">lUpdate</a>
+          <a href="update.php" class="option-btn">Update</a>
         </div>
       </div>
     </section>
@@ -142,10 +159,10 @@ try {
     </div>
 
     <div class="profile">
-      <img src="../images/pic-1.jpg" class="image" alt="" />
+      <img src="<?php echo htmlspecialchars($profile_picture); ?>" class="image" alt="Profile Picture">
       <h3 class="name"><?php echo htmlspecialchars($user_name); ?></h3>
       <p class="role">studen</p>
-      <a href="profile.php" class="btn">view profile</a>
+      <a href="/Project RPL/PHP/profile.php" class="btn">view profile</a>
     </div>
 
     <nav class="navbar">
@@ -160,12 +177,13 @@ try {
   <section class="watch-video">
     <div class="video-container">
       <div class="video">
-        <video
-            src="<?php echo htmlspecialchars($video_url); ?>"
-            controls
-            poster="<?php echo htmlspecialchars($poster_url); ?>"
-            id="video"
-        ></video>
+      <iframe 
+          src="<?php echo htmlspecialchars($video_url); ?>"
+          width="100%" 
+          height="auto" 
+          allow="autoplay; fullscreen" 
+          style="border-radius: 0.5rem;">
+        </iframe>
       </div>
       <h3 class="title"><?php echo htmlspecialchars($video_title); ?></h3>
       <div class="info">
@@ -173,18 +191,15 @@ try {
           <i class="fas fa-calendar"></i>
           <span><?php echo htmlspecialchars($video_date); ?></span>
         </p>
-        <p class="date"><i class="fas fa-heart"></i><span>44 likes</span></p>
       </div>
       <div class="tutor">
-        <img src="../images/MTK/pic-2.jpg" alt="" />
+        <img src="/Project RPL/images/school.png" alt="" />
         <div>
-          <h3>john deo</h3>
-          <span>developer</span>
+          <h3>Ms. Ratna</h3>
         </div>
       </div>
       <form action="" method="post" class="flex">
         <a href="../playlist_MTK.php" class="inline-btn">view playlist</a>
-        <button><i class="far fa-heart"></i><span>like</span></button>
       </form>
       <p class="description"><?php echo htmlspecialchars($video_description); ?></p>
     </div>

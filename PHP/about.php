@@ -26,12 +26,21 @@ try {
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if ($user) {
-        // Extract the username for display
+        // Extract user details for display
         $user_name = $user['username'];
+        $user_gender = $user['gender'];
+
+        // Determine profile picture based on gender
+        $profile_picture = "../images/default.png"; // Default profile picture
+        if ($user_gender === "Male") {
+            $profile_picture = "../images/male-profile.png";
+        } elseif ($user_gender === "Female") {
+            $profile_picture = "../images/female-profile.png";
+        }
     } else {
         // If no user found, destroy session and redirect
         session_destroy();
-        header("Location:   PHP/login_register.php");
+        header("Location: login_register.php");
         exit();
     }
 } catch (PDOException $e) {
@@ -68,7 +77,7 @@ try {
         </div>
 
         <div class="profile">
-          <img src="../images/pic-1.jpg" class="image" alt="" />
+        <img src="<?php echo htmlspecialchars($profile_picture); ?>" class="image" alt="Profile Picture">
           <h3 class="name"><?php echo htmlspecialchars($user_name); ?></h3>
           <p class="role">student</p>
           <a href="profile.php" class="btn">view profile</a>
@@ -85,7 +94,7 @@ try {
       </div>
 
       <div class="profile">
-        <img src="../images/pic-1.jpg" class="image" alt="" />
+      <img src="<?php echo htmlspecialchars($profile_picture); ?>" class="image" alt="Profile Picture">
         <h3 class="name"></h3>
         <h3 class="name"><?php echo htmlspecialchars($user_name); ?></h3>
         <p class="role">student</p>
@@ -134,65 +143,17 @@ try {
         <div class="box">
           <i class="fas fa-graduation-cap"></i>
           <div>
-            <h3>4</h3>
+            <h3>3</h3>
             <p>online courses</p>
           </div>
 
         <div class="box">
           <i class="fas fa-chalkboard-user"></i>
           <div>
-            <h3>4</h3>
+            <h3>3</h3>
             <p>tutors</p>
           </div>
         </div>
-    </section>
-
-    <section class="reviews">
-      <h1 class="heading">Deskripsi Tutor</h1>
-
-      <div class="box-container">
-        <div class="box">
-          <p>
-          Ms. Ratna adalah penggemar teka-teki logika dan permainan strategi seperti catur. 
-          Dengan hobi tersebut, ia membawa pendekatan kreatif dalam mengajarkan konsep matematika, 
-          membuat belajar menjadi seru dan menantang.
-          </p>
-          <div class="student">
-            <img src="../images/pic-2.jpg" alt="" />
-            <div>
-              <h3>Ms. Ratna</h3>
-            </div>
-          </div>
-        </div>
-
-        <div class="box">
-          <p>
-          Mr. Imam memiliki hobi bertualang di alam bebas, seperti hiking dan fotografi satwa liar. 
-          Pengalaman ini membantunya menjelaskan fenomena alam dengan cara yang nyata dan relevan, 
-          sehingga sains terasa lebih dekat dengan kehidupan sehari-hari.
-          <div class="student">
-            <img src="../images/pic-3.jpg" alt="" />
-            <div>
-              <h3>Mr. Imam</h3>
-            </div>
-          </div>
-        </div>
-
-        <div class="box">
-          <p>
-          Ms. Anissa adalah pecinta sastra yang gemar menulis puisi dan cerpen. 
-          Dengan hobi tersebut, ia membantu siswa menemukan keindahan 
-          dalam kata-kata dan mengembangkan kemampuan berbahasa dengan 
-          cara yang inspiratif.
-          </p>
-          <div class="student">
-            <img src="../images/pic-4.jpg" alt="" />
-            <div>
-              <h3>Ms. Anissa</h3>
-            </div>
-          </div>
-        </div>
-      </div>
     </section>
 
     <!-- custom js file link  -->
